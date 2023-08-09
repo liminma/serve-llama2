@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from load_model import Llama2
+from load_model import LLM
 from openai_api_schemas import (
     ChatCompletionChoice,
     ChatCompletionRequestBody,
@@ -25,7 +25,7 @@ app.add_middleware(CORSMiddleware,
 
 @app.post('/v1/chat/completions', response_model=ChatCompletionResponse)
 async def chat_completions(inputs: ChatCompletionRequestBody):
-    llm = Llama2()
+    llm = LLM()
 
     prompt = construct_llama2_prompt(inputs.messages)
     print(prompt)
@@ -41,5 +41,4 @@ async def chat_completions(inputs: ChatCompletionRequestBody):
     return chat_response
 
 if __name__ == '__main__':
-    Llama2()
     uvicorn.run(app, host='0.0.0.0', port=3000)
