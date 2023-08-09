@@ -8,7 +8,8 @@ from openai_api_schemas import (
     ChatCompletionChoice,
     ChatCompletionRequestBody,
     ChatCompletionResponse,
-    ChatResponseMessage,
+    ChatMessage,
+    RoleEnum,
     Usage
 )
 from llama2_prompt import extract_answer, construct_llama2_prompt
@@ -30,9 +31,8 @@ async def chat_completions(inputs: ChatCompletionRequestBody):
     print(prompt)
     outputs = llm(prompt)
 
-    msg = ChatResponseMessage(
-        content=extract_answer(outputs[0]['generated_text'])
-    )
+    msg = ChatMessage(role=RoleEnum.ASSISTANT,
+                      content=extract_answer(outputs[0]['generated_text']))
     chat_response = ChatCompletionResponse(
         choices=[ChatCompletionChoice(message=msg)],
         model=inputs.model,

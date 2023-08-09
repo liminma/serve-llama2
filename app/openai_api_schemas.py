@@ -57,14 +57,9 @@ class ChatCompletionRequestBody(BaseModel):
     user: str = None
 
 
-class ChatResponseMessage(BaseModel):
-    role: str = 'assistant'
-    content: str
-
-
 class ChatCompletionChoice(BaseModel):
     index: int = 0
-    message: ChatResponseMessage
+    message: ChatMessage
     finish_reason: Literal['stop', 'length',
                            'function_call', 'content_filter'] = None
 
