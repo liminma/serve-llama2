@@ -161,4 +161,3 @@ cython_debug/
 .python-version
 venvServeLlama2
 .vscode
-.env.template
