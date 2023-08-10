@@ -27,7 +27,8 @@ app.add_middleware(CORSMiddleware,
 async def chat_completions(inputs: ChatCompletionRequestBody):
     llm = LLM()
 
-    prompt = construct_llama2_prompt(inputs.messages)
+    prompt = construct_llama2_prompt(inputs.messages,
+                                     functions=inputs.functions)
     print(prompt)
     outputs = llm(prompt)
 

@@ -1,17 +1,13 @@
-from openai_api_schemas import ChatMessage, RoleEnum
-
+import json
+from openai_api_schemas import ChatMessage, Function, RoleEnum
+from prompts import DEFAULT_SYSTEM_PROMPT, FUNCTION_CALLING_SYSTEM_PROMPT
 
 B_INST, E_INST = "[INST]", "[/INST]"
 B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
 BOS, EOS = "<s>", "</s>"
 
-DEFAULT_SYSTEM_PROMPT = """\
-You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
 
-If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."""
-
-
-def construct_llama2_prompt(dialog: list[ChatMessage]) -> str:
+def construct_llama2_prompt(dialog: list[ChatMessage], functions: list[Function] = None) -> str:
     """Construct prompt for single turn or multi-turn conversation.
 
        Refer to https://github.com/facebookresearch/llama/blob/main/llama/generation.py#L213 for
@@ -47,6 +43,10 @@ def construct_llama2_prompt(dialog: list[ChatMessage]) -> str:
         dialog = [ChatMessage(role=RoleEnum.SYSTEM,
                               content=DEFAULT_SYSTEM_PROMPT)] + dialog
 
+    if functions is not None:
+        functions_prompt = partial_prompt_from_functions(functions)
+        dialog[0].content += '\n\n' + functions_prompt
+
     # merge the first 2 messages
     dialog = [
         ChatMessage(role=dialog[1].role,
@@ -78,3 +78,19 @@ def extract_answer(generated_text: str) -> str:
         extracted answer
     """
     return generated_text.split(E_INST)[-1].strip()
+
+
+def partial_prompt_from_functions(functions: list[Function]) -> str:
+    """Construct prompt from functions that'll be append to system prompt
+
+    Args:
+        functions (list[Function]): a list of functions, which the model could pick
+
+    Returns:
+        constructed partial prompt
+    """
+    prompt = 'The following functions are described in JSON format. They are available to you:'
+    for fn in functions:
+        prompt += '\n\n' + json.dumps(fn.model_dump())
+
+    return prompt
