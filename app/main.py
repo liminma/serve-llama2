@@ -1,8 +1,8 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-
+from auth import retrieve_api_key
 from load_model import LLM
 from openai_api_schemas import (
     ChatCompletionChoice,
@@ -23,7 +23,9 @@ app.add_middleware(CORSMiddleware,
                    )
 
 
-@app.post('/v1/chat/completions', response_model=ChatCompletionResponse)
+@app.post('/v1/chat/completions',
+          response_model=ChatCompletionResponse,
+          dependencies=[Depends(retrieve_api_key)])
 async def chat_completions(inputs: ChatCompletionRequestBody):
     llm = LLM()
 
