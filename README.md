@@ -54,5 +54,5 @@ $ curl -X 'POST' \
     }
   ]
 }'
-{"choices":[{"index":0,"message":{"role":"assistant","content":"Hello! I'm doing well, thanks for asking. I'm here to assist you with any questions or concerns you may have. Is there anything specific you'd like to know or discuss?","name":null,"function_call":null},"finish_reason":null}],"created":1695259828,"id":"chatcmpl-145dea8910a142b7b6767330f776e22a","model":"dummy name","object":"chat.completion","usage":{"completion_tokens":0,"prompt_tokens":0,"total_tokens":0}}(venvServeLlama2)
+{"choices":[{"index":0,"message":{"role":"assistant","content":"Hello! I'm doing well, thanks for asking. I'm here to assist you with any questions or concerns you may have. Is there anything specific you'd like to know or discuss?","name":null,"function_call":null},"finish_reason":null}],"created":1695259828,"id":"chatcmpl-145dea8910a142b7b6767330f776e22a","model":"dummy name","object":"chat.completion","usage":{"completion_tokens":0,"prompt_tokens":0,"total_tokens":0}}
 ```
