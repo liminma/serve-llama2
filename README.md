@@ -22,7 +22,7 @@ Now the server listens at port 3000.
 ## To call:
 It can be called by `openai.ChatCompletion.create()` function,
 
-```bash
+```
 >>> import openai
 >>> openai.api_base = "http://localhost:3000/v1"
 >>> openai.api_key = "992239417f1e4c0bb768dc204df31289"
